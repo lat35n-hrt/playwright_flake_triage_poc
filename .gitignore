@@ -1,3 +1,6 @@
+# work directory
+work
+
 # artifacts: generated outputs (default ignore)
 artifacts/**
 
