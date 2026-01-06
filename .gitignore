@@ -1,0 +1,16 @@
+# python
+__pycache__/
+*.py[cod]
+
+# venv
+.venv/
+
+# tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# local outputs
+artifacts/*.jsonl
+artifacts/*.zip
+artifacts/*.png
