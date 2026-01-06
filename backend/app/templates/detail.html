@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Flake Lab - Detail</title>
+    <style>
+      body { font-family: sans-serif; margin: 24px; }
+      button { padding: 8px 14px; }
+      #overlay {
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,0.01);
+        z-index: 9999;
+        display: none;
+      }
+      .ok { color: #0a0; }
+      .err { color: #a00; }
+    </style>
+  </head>
+  <body>
+    <div id="overlay"></div>
+    <a href="/">← Back</a>
+    <h1 id="title">Loading...</h1>
+    <p id="desc"></p>
+
+    <button id="approve">Approve</button>
+    <p id="status"></p>
+
+    <script>
+      const ITEM_ID = {{ item_id }};
+      const statusEl = document.getElementById("status");
+
+      async function load() {
+        const res = await fetch(`/api/items/${ITEM_ID}`);
+        if (!res.ok) {
+          statusEl.className = "err";
+          statusEl.textContent = `Failed to load: ${res.status}`;
+          return;
+        }
+        const data = await res.json();
+        document.getElementById("title").textContent = data.item.name;
+        document.getElementById("desc").textContent = data.detail.description;
+      }
+
+      async function approve() {
+        statusEl.className = "";
+        statusEl.textContent = "Approving...";
+        const res = await fetch(`/api/items/${ITEM_ID}/approve`, { method: "POST" });
+        const data = await res.json();
+        if (!res.ok) {
+          statusEl.className = "err";
+          statusEl.textContent = `Approve failed: ${res.status} ${JSON.stringify(data)}`;
+          return;
+        }
+        statusEl.className = "ok";
+        statusEl.textContent = `Approved: ${data.status}`;
+      }
+
+      // optional overlay flake
+      const OVERLAY_MS = window.__OVERLAY_MS__ || 0;
+      if (OVERLAY_MS > 0) {
+        const ov = document.getElementById("overlay");
+        ov.style.display = "block";
+        setTimeout(() => { ov.style.display = "none"; }, OVERLAY_MS);
+      }
+
+      document.getElementById("approve").addEventListener("click", approve);
+      load();
+    </script>
+  </body>
+</html>

@@ -35,5 +35,11 @@ class Settings:
     # Logging
     log_filename: str = _get_str("BACKEND_JSONL_LOG", "backend_latency_samples.jsonl")
 
+    # UI flake overlay
+    ui_overlay_ms: int = _get_int("UI_OVERLAY_MS", 0)   # e.g. 300
+
 
 settings = Settings()
+
+
+

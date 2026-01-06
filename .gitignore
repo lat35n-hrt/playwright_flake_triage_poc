@@ -1,3 +1,12 @@
+# artifacts: generated outputs (default ignore)
+artifacts/**
+
+# keep lightweight summaries as evidence
+!artifacts/summary_before.json
+!artifacts/summary_after.json
+!artifacts/README.md
+
+
 # python
 __pycache__/
 *.py[cod]

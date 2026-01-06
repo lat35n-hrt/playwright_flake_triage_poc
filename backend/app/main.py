@@ -13,6 +13,11 @@ from fastapi.responses import JSONResponse
 from app.flake import DelayConfig, DelayInjector
 from app.settings import settings
 
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+
+
+
 app = FastAPI(title="Playwright Flake Triage PoC - Mock API")
 
 # Resolve project root: .../playwright_flake_triage_poc
@@ -21,6 +26,10 @@ ARTIFACTS_DIR = PROJECT_ROOT / "artifacts"
 ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
 
 LOG_PATH = ARTIFACTS_DIR / settings.log_filename
+
+# Template setup
+templates = Jinja2Templates(directory=str(PROJECT_ROOT / "backend" / "app" / "templates"))
+
 
 injector = DelayInjector(
     DelayConfig(
@@ -113,3 +122,25 @@ async def approve_item(item_id: int, request: Request):
     if item is None:
         return JSONResponse(status_code=404, content={"error": "not_found", "id": item_id})
     return {"id": item_id, "status": "approved"}
+
+
+@app.get("/", response_class=HTMLResponse)
+async def ui_index(request: Request):
+    # overlay config is injected into global JS variable
+    html = templates.get_template("index.html").render()
+    # inject window.__OVERLAY_MS__
+    injected = html.replace(
+        "</head>",
+        f"<script>window.__OVERLAY_MS__ = {settings.ui_overlay_ms};</script></head>"
+    )
+    return HTMLResponse(injected)
+
+
+@app.get("/items/{item_id}", response_class=HTMLResponse)
+async def ui_detail(item_id: int, request: Request):
+    html = templates.get_template("detail.html").render(item_id=item_id)
+    injected = html.replace(
+        "</head>",
+        f"<script>window.__OVERLAY_MS__ = {settings.ui_overlay_ms};</script></head>"
+    )
+    return HTMLResponse(injected)
