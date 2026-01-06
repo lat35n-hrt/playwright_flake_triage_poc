@@ -62,3 +62,7 @@ Example failure signature (before):
 Locator.click: Timeout 200ms exceeded
 #__flake_overlay intercepts pointer events
 ```
+
+
+### Note on rendering vs. DOM-level flakiness
+This PoC targets a DOM/event-level failure mode (click interception by an overlay). In our setup, enabling Jinja2 (server-side HTML templating) did not materially change the DOM structure or the interaction flow, so the before/after behavior remained consistent. If the UI implementation changes DOM structure, selectors or timing assumptions may need to be updated accordingly.
