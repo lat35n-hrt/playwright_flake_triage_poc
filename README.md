@@ -74,6 +74,9 @@ uvicorn app.main:app --host 127.0.0.1 --port 8004
 
 Base URL: `http://127.0.0.1:8004`
 
+Backend server must be started from ./backend (required for module path / templates)
+
+
 ### 2) Run API tests (pytest)
 
 ```bash
