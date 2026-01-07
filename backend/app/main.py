@@ -7,7 +7,7 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, Request
+from fastapi import Body, FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from app.flake import DelayConfig, DelayInjector
@@ -144,3 +144,8 @@ async def ui_detail(item_id: int, request: Request):
         f"<script>window.__OVERLAY_MS__ = {settings.ui_overlay_ms};</script></head>"
     )
     return HTMLResponse(injected)
+
+@app.post("/api/items", status_code=201)
+async def create_item(payload: dict = Body(...)):
+    # PoC: minimal echo
+    return payload
