@@ -16,6 +16,7 @@ __pycache__/
 
 # venv
 .venv/
+backend/.venv_*/
 
 # tooling
 .pytest_cache/
