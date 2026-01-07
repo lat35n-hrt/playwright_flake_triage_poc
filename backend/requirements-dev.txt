@@ -1,2 +1,2 @@
-pytest
-playwright
+-r requirements-dev-api.txt
+-r requirements-dev-e2e.txt
