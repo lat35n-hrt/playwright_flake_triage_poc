@@ -1,7 +1,9 @@
+# tests/test_approve_flow.py
+import os
 from playwright.sync_api import Page, expect
 
 def test_approve_flow(page: Page):
-    base = "http://127.0.0.1:8002"  # backend server URL
+    base = os.getenv("BASE_URL", "http://127.0.0.1:8004")
     page.goto(f"{base}/", wait_until="domcontentloaded")
 
     # Detail page
