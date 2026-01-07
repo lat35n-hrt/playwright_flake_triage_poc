@@ -1,4 +1,4 @@
-# tests/test_approve_flow.py
+# tests/approve_flow.py
 import os
 from playwright.sync_api import Page, expect
 
